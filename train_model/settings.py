@@ -4,6 +4,7 @@ URL_DATA = 'https://archive.ics.uci.edu/ml/machine-learning-databases/concrete/c
 
 # Paths
 PATH_PROJECT = Path.cwd()
+PATH_MODELS = PATH_PROJECT.parent / 'models'
 
 # Lists of columns and features
 COLS_MAPPING = {
@@ -60,10 +61,13 @@ FE_SMART_CORRELATION_PARAMS={
 # Other Parameters
 BOOL_VERBOSE=True
 SEED=1
+
 N_JOBS=-2
+N_FEATURES=len(COLS_FEATURES)
 
 # Parameters for model training, validation and tracking
 TEST_SIZE=0.2
+STRATIFY_BY='age'
 SEARCH_ITERATIONS=50
 
 CV_SCORES=['mse', 'rmse', 'mae', 'mape', 'max_error', 'r2']

@@ -4,6 +4,7 @@ import joblib
 import os
 
 from sklearn.pipeline import Pipeline
+from sklearn.model_selection import train_test_split
 
 class DataManager:
     """
@@ -33,6 +34,37 @@ class DataManager:
     def get_data(self) -> pd.DataFrame:
         
         return self._df
+    
+    def split_data(
+        self, 
+        col_features: list, 
+        col_target: str = None, 
+        test_size: float = 0.2, 
+        seed: int = 1, 
+        col_stratify: str = None,
+        *args, **kwargs):
+        
+        if col_target is None:
+            col_target = [col for col in self._df.columns if col not in col_features]
+        
+        if col_stratify is not None:
+            col_stratify = self._df[col_stratify]
+        
+        # Split Data
+        self._X = self._df[col_features] 
+        self._y = self._df[col_target] 
+
+        # Create training and test set
+        X_train, X_test, y_train, y_test = train_test_split(
+            self._X, 
+            self._y,
+            test_size=test_size, 
+            random_state=seed, 
+            stratify=col_stratify,
+            *args, **kwargs
+            )
+    
+        return X_train, X_test, y_train, y_test
     
     @property
     def df(self):
