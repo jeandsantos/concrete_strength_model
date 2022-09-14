@@ -1,4 +1,4 @@
-from preprocessing.transformers import numeric
+from . import numeric
 
 """
 Subpackage for preprocessing operations

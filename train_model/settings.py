@@ -4,7 +4,7 @@ URL_DATA = 'https://archive.ics.uci.edu/ml/machine-learning-databases/concrete/c
 
 # Paths
 PATH_PROJECT = Path.cwd()
-PATH_MODELS = PATH_PROJECT.parent / 'models'
+PATH_MODELS = PATH_PROJECT / 'models'
 
 # Lists of columns and features
 COLS_MAPPING = {
@@ -77,3 +77,5 @@ CV_FOLDS=10
 MLFLOW_BOOL=True
 MLFLOW_TRACKING_URI='http://localhost:5000'
 MLFLOW_EXPERIMENT_NAME='concrete-mixtures'
+
+PROJECT_NAME='concrete-mixture-optimization'

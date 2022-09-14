@@ -1,5 +1,6 @@
 import pandas as pd
 import typing as t
+import shutil
 import joblib
 import os
 
@@ -110,3 +111,10 @@ def remove_old_pipelines(files_to_keep: t.List[str], path_models: str) -> None:
         
         if (model_file not in do_not_delete) and ('.png' not in path_file):
             os.remove(path_file)
+            
+def empty_dir(directory):
+    for item in directory.iterdir():
+        if item.is_dir():
+            shutil.rmtree(item)
+        else:
+            item.unlink()

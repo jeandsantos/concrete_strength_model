@@ -1,4 +1,4 @@
-from utils import data_manager
+from . import data_manager, scoring
 
 """
 Subpackage with supporting functions and classes

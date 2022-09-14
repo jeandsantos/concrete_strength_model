@@ -1,6 +1,11 @@
 *.ipynb
 *.pkl
 
+
+# MLflow files
+/mlruns/
+mlruns/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
