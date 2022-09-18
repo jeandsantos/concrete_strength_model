@@ -1,10 +1,13 @@
 *.ipynb
 *.pkl
-
+*.db
+*.sql
 
 # MLflow files
 /mlruns/
 mlruns/
+/artifacts/
+artifacts/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

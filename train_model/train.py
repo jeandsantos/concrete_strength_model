@@ -1,8 +1,9 @@
 # Load Packages
+import os
 import typing as t
 import numpy as np
 import pandas as pd
-import warnings, logging, datetime, shutil
+import warnings, logging, datetime
 import mlflow, mlflow.sklearn
 from pathlib import Path
 
@@ -27,9 +28,6 @@ from learners.models import model_objects
 np.random.RandomState(s.SEED)
 
 def main():
-
-    print('PATH: ', Path.cwd())
-    print('PATH_PARENT: ', Path.cwd().parent)
 
     # Import and split data
     dm = DataManager(
@@ -56,29 +54,26 @@ def main():
     logger = logging.getLogger(__name__)
 
     # Use mlflow to track experiments
-    if s.MLFLOW_BOOL:
-            
-        # TODO connect to sqlite db
-        # os.environ.setdefault(key='MLFLOW_TRACKING_URI', value=MLFLOW_TRACKING_URI)
-        # mlflow.set_tracking_uri(MLFLOW_TRACKING_URI)
+    os.environ.setdefault(key='MLFLOW_TRACKING_URI', value=s.MLFLOW_TRACKING_URI)
+    mlflow.set_tracking_uri(s.MLFLOW_TRACKING_URI)
+    
+    warnings.filterwarnings('ignore')
+    ml_exp = mlflow.get_experiment_by_name(s.MLFLOW_EXPERIMENT_NAME)
+    
+    if ml_exp is not None:
+        # Delete previous experiment
+        mlflow.delete_experiment(ml_exp.experiment_id)
+        # empty_dir(Path.cwd() / 'mlruns' / '.trash')
         
-        warnings.filterwarnings('ignore')
-        ml_exp = mlflow.get_experiment_by_name(s.MLFLOW_EXPERIMENT_NAME)
-        
-        
-        if ml_exp is not None:
-            # Delete previous experiment
-            mlflow.delete_experiment(ml_exp.experiment_id)
-            empty_dir(Path.cwd() / 'mlruns' / '.trash')
-            
-        experiment_id = mlflow.create_experiment(
-            s.MLFLOW_EXPERIMENT_NAME,
-            tags={"project": s.PROJECT_NAME}
-        )
-        
-        print(f'Created Experiment \'{s.MLFLOW_EXPERIMENT_NAME}\' | ID: {experiment_id}')
+    experiment_id = mlflow.create_experiment(
+        s.MLFLOW_EXPERIMENT_NAME, 
+        artifact_location='./artifacts',
+        tags={"project": s.PROJECT_NAME}
+    )
+    
+    print(f'Created Experiment \'{s.MLFLOW_EXPERIMENT_NAME}\' | ID: {experiment_id}')
 
-        mlflow.sklearn.autolog()
+    mlflow.sklearn.autolog()
 
     # Train models
     for model_name in model_objects.keys():
@@ -96,8 +91,7 @@ def main():
         
         if s.BOOL_VERBOSE:
             print('_'*50)
-            print(model_name)
-            print(ts)
+            print(f'{model_name}\n{ts}')
 
         # Pipeline for feature engineering and model
         pipeline = Pipeline(steps=[
@@ -150,26 +144,24 @@ def main():
             print(f'Best model: {best_model}')
             print(f'Training time {round(tts.total_seconds())}s')
         
-        if s.MLFLOW_BOOL:
-            
-            mlflow.log_param("cv_folds", s.CV_FOLDS)
-            mlflow.log_param("cv_metric", s.CV_METRIC)
-            mlflow.log_param("search_iterations", s.SEARCH_ITERATIONS)
-            mlflow.log_param("seed", s.SEED)
-            mlflow.log_param("training_set_size", X_train.shape[0])
-            mlflow.log_param("test_set_size", X_test.shape[0])    
-            
-            mlflow.log_param("model_type", model_name)
-            mlflow.log_param("best_params", rs.best_params_)
-            
-            for param, value in rs.best_params_.items():
-                    mlflow.log_param(param.split('__')[-1], value)
-            
-            for metric, score in all_scores.items():
-                mlflow.log_metric(metric, score)
-            
-            mlflow.sklearn.log_model(rs, 'model')
-            mlflow.end_run()
+        mlflow.log_param("cv_folds", s.CV_FOLDS)
+        mlflow.log_param("cv_metric", s.CV_METRIC)
+        mlflow.log_param("search_iterations", s.SEARCH_ITERATIONS)
+        mlflow.log_param("seed", s.SEED)
+        mlflow.log_param("training_set_size", X_train.shape[0])
+        mlflow.log_param("test_set_size", X_test.shape[0])    
+        mlflow.log_param("best_params", rs.best_params_)
+        
+        mlflow.set_tag("model_type", model_name)
+        mlflow.sklearn.log_model(rs, 'model')
+        
+        for param, value in rs.best_params_.items():
+                mlflow.log_param(param.split('__')[-1], value)
+        
+        for metric, score in all_scores.items():
+            mlflow.log_metric(metric, score)
+        
+        mlflow.end_run()
 
 if __name__ == '__main__':
     main()

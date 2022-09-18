@@ -1,0 +1,102 @@
+URL_DATA: 'https://archive.ics.uci.edu/ml/machine-learning-databases/concrete/compressive/Concrete_Data.xls'
+
+# Paths
+PATH_PROJECT: ''
+PATH_MODELS: 'models'
+
+COLS_MAPPING:
+    'Cement (component 1)(kg in a m^3 mixture)': 'cement'
+    'Blast Furnace Slag (component 2)(kg in a m^3 mixture)': 'slag'
+    'Fly Ash (component 3)(kg in a m^3 mixture)': 'ash'
+    'Water  (component 4)(kg in a m^3 mixture)': 'water'
+    'Superplasticizer (component 5)(kg in a m^3 mixture)': 'superplasticizer'
+    'Coarse Aggregate  (component 6)(kg in a m^3 mixture)': 'coarse_aggregate'
+    'Fine Aggregate (component 7)(kg in a m^3 mixture)': 'fine_aggregate'
+    'Age (day)': 'age'
+    'Concrete compressive strength(MPa, megapascals) ': 'strength'
+
+COLS_FEATURES: 
+    - 'cement'
+    - 'slag'
+    - 'ash'
+    - 'water'
+    - 'superplasticizer'
+    - 'coarse_aggregate'
+    - 'fine_aggregate'
+    - 'age'
+    
+
+COLS_COMPOSITION: 
+    - 'cement'
+    - 'slag'
+    - 'ash'
+    - 'water'
+    - 'superplasticizer'
+    - 'coarse_aggregate'
+    - 'fine_aggregate'
+
+COLS_SOLIDS: 
+    - 'cement'
+    - 'slag'
+    - 'ash'
+    - 'superplasticizer'
+    - 'coarse_aggregate'
+    - 'fine_aggregate'
+
+COLS_RATIO_AGGREGATES_SOLIDS_NUM: 
+    - 'coarse_aggregate'
+    - 'fine_aggregate'
+
+COLS_RATIO_AGGREGATES_SOLIDS_DEN: 
+    - 'cement'
+    - 'slag'
+    - 'ash'
+    - 'superplasticizer'
+
+COLS_RATIO_CEMENT_WATER_NUM: 
+    - 'cement'
+
+COLS_RATIO_CEMENT_WATER_DEN: 
+    - 'water'
+
+COLS_TARGET: 'strength'
+
+# Parameters for feature engineering
+FE_DROP_CONSTANT_PARAMS:
+    tol: 1
+    missing_values: 'ignore'
+
+FE_SMART_CORRELATION_PARAMS:
+    threshold: 0.90
+    method: 'pearson'
+    selection_method: 'missing_values'
+    missing_values: 'ignore'
+
+# Parameters for model training, validation and tracking
+TEST_SIZE: 0.2
+STRATIFY_BY: 'age'
+SEARCH_ITERATIONS: 50
+
+CV_SCORES: 
+    - 'mse'
+    - 'rmse'
+    - 'mae'
+    - 'mape'
+    - 'max_error'
+    - 'r2'
+
+CV_METRIC: 'mse'
+CV_FOLDS: 10
+
+MLFLOW_BOOL: True
+MLFLOW_TRACKING_URI: 'http://localhost:5000'
+MLFLOW_EXPERIMENT_NAME: 'concrete-mixtures'
+
+PROJECT_NAME: 'concrete-mixture-optimization'
+
+# Other Parameters
+BOOL_VERBOSE: True
+SEED: 1
+
+N_JOBS: -1
+N_FEATURES: 8
