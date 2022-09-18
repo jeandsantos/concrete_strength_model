@@ -8,7 +8,7 @@ class SumTransformer(BaseEstimator, TransformerMixin):
     Create feature with the sum of the values of selected columns
     """
     
-    def __init__(self, columns: list, col_name: str) -> None:
+    def __init__(self, columns: t.Iterable, col_name: str) -> None:
         
         if not isinstance(columns, list):
             raise ValueError('columns must be a list')
@@ -34,7 +34,7 @@ class PercentageTransformer(BaseEstimator, TransformerMixin):
     Converts counts to percentages
     """
     
-    def __init__(self, col_numerator:list, col_denominator:list=None) -> None:
+    def __init__(self, col_numerator: t.List, col_denominator: t.List = None) -> None:
         
         if not isinstance(col_numerator, list):
             raise ValueError('col_numerator must be a list')
@@ -42,7 +42,7 @@ class PercentageTransformer(BaseEstimator, TransformerMixin):
         self.col_numerator = col_numerator
         self.col_denominator = col_denominator
         
-    def fit(self, X:pd.DataFrame, y=None):
+    def fit(self, X: pd.DataFrame, y=None):
         return self
     
     def transform(self, X:pd.DataFrame):
@@ -63,7 +63,7 @@ class RatioTransformer(BaseEstimator, TransformerMixin):
     Calculates ratios between one or more columns of a DataFrame
     """
     
-    def __init__(self, col_numerator:list, col_denominator:list, name:str) -> None:
+    def __init__(self, col_numerator: t.List, col_denominator: t.List, name: str) -> None:
         
         if not isinstance(col_numerator, list):
             raise ValueError('col_numerator must be a list')
@@ -75,10 +75,10 @@ class RatioTransformer(BaseEstimator, TransformerMixin):
         self.col_denominator = col_denominator
         self.name = name
         
-    def fit(self, X:pd.DataFrame, y=None):
+    def fit(self, X: pd.DataFrame, y=None):
         return self
     
-    def transform(self, X:pd.DataFrame):
+    def transform(self, X: pd.DataFrame):
         
         X = X.copy()
         

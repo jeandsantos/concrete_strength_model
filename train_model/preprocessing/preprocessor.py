@@ -9,32 +9,34 @@ from feature_engine.selection import DropConstantFeatures, SmartCorrelatedSelect
 
 from preprocessing.transformers.numeric import SumTransformer, PercentageTransformer, RatioTransformer
 
-from settings import (
-    COLS_COMPOSITION, 
-    COLS_SOLIDS,
-    COLS_RATIO_AGGREGATES_SOLIDS, 
-    COLS_RATIO_CEMENT_WATER,
-    FE_DROP_CONSTANT_PARAMS,
-    FE_SMART_CORRELATION_PARAMS,
-)
+from config.core import config
+
+# from settings import (
+#     COLS_COMPOSITION, 
+#     COLS_SOLIDS,
+#     COLS_RATIO_AGGREGATES_SOLIDS, 
+#     COLS_RATIO_CEMENT_WATER,
+#     FE_DROP_CONSTANT_PARAMS,
+#     FE_SMART_CORRELATION_PARAMS,
+# )
 
 preprocessor = Pipeline(steps=[
     # Create percentages
-    ('percentage', PercentageTransformer(col_numerator=COLS_COMPOSITION)),
+    ('percentage', PercentageTransformer(col_numerator=config.config_model.cols_composition)),
     
     ## Feature Creation
     # Create sum of solids
-    ('total_solids', SumTransformer(columns=COLS_SOLIDS, col_name='total_solids')),
+    ('total_solids', SumTransformer(columns=config.config_model.cols_solids, col_name='total_solids')),
     
     # Create ratio-based features
     ('ratio_aggregates_solids', RatioTransformer(
-        col_numerator=COLS_RATIO_AGGREGATES_SOLIDS[0], 
-        col_denominator=COLS_RATIO_AGGREGATES_SOLIDS[1], 
+        col_numerator=config.config_model.cols_ratio_aggregates_solids_num, 
+        col_denominator=config.config_model.cols_ratio_aggregates_solids_den, 
         name='ratio_aggregates_solids')),
     # Create ratio (married to not married)
     ('ratio_cement_water', RatioTransformer(
-        col_numerator=COLS_RATIO_CEMENT_WATER[0], 
-        col_denominator=COLS_RATIO_CEMENT_WATER[1], 
+        col_numerator=config.config_model.cols_ratio_cement_water_num, 
+        col_denominator=config.config_model.cols_ratio_cement_water_den, 
         name='ratio_cement_water')),
     
     ## Feature Transformation
@@ -43,9 +45,9 @@ preprocessor = Pipeline(steps=[
     # Z-score scaling
     ('standardization', SklearnTransformerWrapper(transformer=StandardScaler())),
     # Remove highly correlated 
-    ('remove_correlated', SmartCorrelatedSelection(**FE_SMART_CORRELATION_PARAMS)),
+    ('remove_correlated', SmartCorrelatedSelection(**config.config_model.fe_smart_correlation_params.dict())),
 
     ## Feature Selection
     # Drop Constant Features
-    ('drop_constant', DropConstantFeatures(**FE_DROP_CONSTANT_PARAMS)),
+    ('drop_constant', DropConstantFeatures(**config.config_model.fe_drop_constant_params.dict())),
     ])

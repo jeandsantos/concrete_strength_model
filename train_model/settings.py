@@ -1,6 +1,6 @@
 from pathlib import Path
 
-URL_DATA = 'https://archive.ics.uci.edu/ml/machine-learning-databases/concrete/compressive/Concrete_Data.xls'
+PATH_DATA = 'https://archive.ics.uci.edu/ml/machine-learning-databases/concrete/compressive/Concrete_Data.xls'
 
 # Paths
 PATH_PROJECT = Path.cwd()
@@ -19,7 +19,7 @@ COLS_MAPPING = {
     'Concrete compressive strength(MPa, megapascals) ': 'strength' 
 }
 
-COLS_FEATURES = [
+cols_features = [
     'cement', 'slag', 'ash',
     'water', 'superplasticizer', 'coarse_aggregate',
     'fine_aggregate', 'age',
@@ -43,7 +43,7 @@ COLS_RATIO_CEMENT_WATER = [
     ['water',],
     ]
 
-COLS_TARGET = 'strength'
+cols_target = 'strength'
 
 # Paramters for feature engineering
 FE_DROP_CONSTANT_PARAMS={
@@ -60,22 +60,22 @@ FE_SMART_CORRELATION_PARAMS={
 
 # Other Parameters
 BOOL_VERBOSE=True
-SEED=1
+seed=1
 
-N_JOBS=-2
-N_FEATURES=len(COLS_FEATURES)
+n_jobs=-2
+N_FEATURES=len(cols_features)
 
 # Parameters for model training, validation and tracking
-TEST_SIZE=0.2
+test_size=0.2
 STRATIFY_BY='age'
-SEARCH_ITERATIONS=50
+search_iterations=50
 
 CV_SCORES=['mse', 'rmse', 'mae', 'mape', 'max_error', 'r2']
 CV_METRIC='mse'
-CV_FOLDS=10
+cv_folds=10
 
-MLFLOW_BOOL=True
-MLFLOW_TRACKING_URI='http://localhost:5000'
-MLFLOW_EXPERIMENT_NAME='concrete-mixtures'
+mlflow_bool=True
+mlflow_tracking_uri='http://localhost:5000'
+mlflow_experiment_name='concrete-mixtures'
 
 PROJECT_NAME='concrete-mixture-optimization'

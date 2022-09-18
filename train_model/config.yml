@@ -1,10 +1,7 @@
-URL_DATA: 'https://archive.ics.uci.edu/ml/machine-learning-databases/concrete/compressive/Concrete_Data.xls'
-
 # Paths
-PATH_PROJECT: ''
-PATH_MODELS: 'models'
+path_data: 'https://archive.ics.uci.edu/ml/machine-learning-databases/concrete/compressive/Concrete_Data.xls'
 
-COLS_MAPPING:
+cols_mapping:
     'Cement (component 1)(kg in a m^3 mixture)': 'cement'
     'Blast Furnace Slag (component 2)(kg in a m^3 mixture)': 'slag'
     'Fly Ash (component 3)(kg in a m^3 mixture)': 'ash'
@@ -15,7 +12,7 @@ COLS_MAPPING:
     'Age (day)': 'age'
     'Concrete compressive strength(MPa, megapascals) ': 'strength'
 
-COLS_FEATURES: 
+cols_features: 
     - 'cement'
     - 'slag'
     - 'ash'
@@ -26,7 +23,7 @@ COLS_FEATURES:
     - 'age'
     
 
-COLS_COMPOSITION: 
+cols_composition: 
     - 'cement'
     - 'slag'
     - 'ash'
@@ -35,7 +32,7 @@ COLS_COMPOSITION:
     - 'coarse_aggregate'
     - 'fine_aggregate'
 
-COLS_SOLIDS: 
+cols_solids: 
     - 'cement'
     - 'slag'
     - 'ash'
@@ -43,41 +40,41 @@ COLS_SOLIDS:
     - 'coarse_aggregate'
     - 'fine_aggregate'
 
-COLS_RATIO_AGGREGATES_SOLIDS_NUM: 
+cols_ratio_aggregates_solids_num: 
     - 'coarse_aggregate'
     - 'fine_aggregate'
 
-COLS_RATIO_AGGREGATES_SOLIDS_DEN: 
+cols_ratio_aggregates_solids_den: 
     - 'cement'
     - 'slag'
     - 'ash'
     - 'superplasticizer'
 
-COLS_RATIO_CEMENT_WATER_NUM: 
+cols_ratio_cement_water_num: 
     - 'cement'
 
-COLS_RATIO_CEMENT_WATER_DEN: 
+cols_ratio_cement_water_den: 
     - 'water'
 
-COLS_TARGET: 'strength'
+cols_target: 'strength'
 
 # Parameters for feature engineering
-FE_DROP_CONSTANT_PARAMS:
+fe_drop_constant_params:
     tol: 1
     missing_values: 'ignore'
 
-FE_SMART_CORRELATION_PARAMS:
+fe_smart_correlation_params:
     threshold: 0.90
     method: 'pearson'
     selection_method: 'missing_values'
     missing_values: 'ignore'
 
 # Parameters for model training, validation and tracking
-TEST_SIZE: 0.2
-STRATIFY_BY: 'age'
-SEARCH_ITERATIONS: 50
+test_size: 0.2
+stratify_by: 'age'
+search_iterations: 50
 
-CV_SCORES: 
+cv_scores: 
     - 'mse'
     - 'rmse'
     - 'mae'
@@ -85,18 +82,18 @@ CV_SCORES:
     - 'max_error'
     - 'r2'
 
-CV_METRIC: 'mse'
-CV_FOLDS: 10
+cv_metric: 'mse'
+cv_folds: 10
 
-MLFLOW_BOOL: True
-MLFLOW_TRACKING_URI: 'http://localhost:5000'
-MLFLOW_EXPERIMENT_NAME: 'concrete-mixtures'
+mlflow_bool: True
+mlflow_tracking_uri: 'http://localhost:5000'
+mlflow_experiment_name: 'concrete-mixtures'
 
-PROJECT_NAME: 'concrete-mixture-optimization'
+project_name: 'concrete-mixture-optimization'
 
 # Other Parameters
-BOOL_VERBOSE: True
-SEED: 1
+bool_verbose: True
+seed: 1
 
-N_JOBS: -1
-N_FEATURES: 8
+n_jobs: -1
+n_features: 8

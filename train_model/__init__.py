@@ -1,1 +1,1 @@
-from train_model import preprocessing, utils, learners, settings
+from . import preprocessing, utils, learners, settings, config

@@ -7,7 +7,7 @@ from sklearn.cross_decomposition import PLSRegression
 from sklearn.svm import SVR
 from sklearn.neural_network import MLPRegressor
 
-from settings import SEED, N_JOBS, N_FEATURES
+from config.core import config
 
 model_objects = {
     'pls': {
@@ -15,12 +15,12 @@ model_objects = {
             max_iter=1000
             ),
         'params': {
-            'model__n_components': range(1, N_FEATURES),
+            'model__n_components': range(1, config.config_model.n_features),
         }
     },
     'lasso': {
         'model': Lasso(
-            random_state=SEED
+            random_state=config.config_model.seed
         ),
         'params': {
             'model__max_iter': [1000, 5000,],
@@ -29,7 +29,7 @@ model_objects = {
     },
     'elasticnet': {
         'model': ElasticNet(
-            random_state=SEED,
+            random_state=config.config_model.seed,
             max_iter=1000,
         ),
         'params': {
@@ -52,8 +52,8 @@ model_objects = {
     'random_forest': {
         'model': RandomForestRegressor(
             criterion='squared_error',
-            n_jobs=N_JOBS,
-            random_state=SEED,
+            n_jobs=config.config_model.n_jobs,
+            random_state=config.config_model.seed,
             verbose=False,
             ),
         'params': {
@@ -66,7 +66,7 @@ model_objects = {
     'gbm': {
         'model': GradientBoostingRegressor(
             loss='squared_error',
-            random_state=SEED,
+            random_state=config.config_model.seed,
             verbose=False,
             ),
         'params': {
@@ -82,7 +82,7 @@ model_objects = {
         'model': MLPRegressor(
             solver='adam',
             n_iter_no_change=10,
-            random_state=SEED,
+            random_state=config.config_model.seed,
             verbose=False,
             ),
         'params': {

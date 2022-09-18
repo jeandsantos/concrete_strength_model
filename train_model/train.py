@@ -1,11 +1,10 @@
 # Load Packages
 import os
-import typing as t
 import numpy as np
-import pandas as pd
-import warnings, logging, datetime
+import warnings
+import logging
+import datetime
 import mlflow, mlflow.sklearn
-from pathlib import Path
 
 from sklearn.model_selection import RandomizedSearchCV
 from sklearn.metrics import (
@@ -18,31 +17,35 @@ from sklearn.metrics import (
 )
 from sklearn.pipeline import Pipeline
 
-import settings as s
+# import settings as s
+
+from config.core import config, PATH_MODELS
 
 from preprocessing.preprocessor import preprocessor
-from utils.data_manager import DataManager, save_pipeline, empty_dir
+from utils.data_manager import DataManager, save_pipeline
 from utils.scoring import scorers, calculate_scores
-from learners.models import model_objects
+from learners import model_objects
 
-np.random.RandomState(s.SEED)
+np.random.RandomState(config.config_model.seed)
 
 def main():
 
+    ts = datetime.datetime.now()
+
     # Import and split data
     dm = DataManager(
-        path=s.URL_DATA, 
-        columns_mapping=s.COLS_MAPPING
+        path=config.config_app.path_data, 
+        columns_mapping=config.config_model.cols_mapping
         )
 
     X_train, X_test, y_train, y_test = dm\
         .load_dataset()\
         .split_data(
-            col_features=s.COLS_FEATURES,
-            col_target=s.COLS_TARGET,
-            test_size=s.TEST_SIZE,
-            seed=s.SEED,
-            col_stratify=s.STRATIFY_BY
+            col_features=config.config_model.cols_features,
+            col_target=config.config_model.cols_target,
+            test_size=config.config_model.test_size,
+            seed=config.config_model.seed,
+            col_stratify=config.config_model.stratify_by
         )
         
     # Placeholder for best-performing model and metric
@@ -54,11 +57,11 @@ def main():
     logger = logging.getLogger(__name__)
 
     # Use mlflow to track experiments
-    os.environ.setdefault(key='MLFLOW_TRACKING_URI', value=s.MLFLOW_TRACKING_URI)
-    mlflow.set_tracking_uri(s.MLFLOW_TRACKING_URI)
+    os.environ.setdefault(key='mlflow_tracking_uri', value=config.config_app.mlflow_tracking_uri)
+    mlflow.set_tracking_uri(config.config_app.mlflow_tracking_uri)
     
     warnings.filterwarnings('ignore')
-    ml_exp = mlflow.get_experiment_by_name(s.MLFLOW_EXPERIMENT_NAME)
+    ml_exp = mlflow.get_experiment_by_name(config.config_app.mlflow_experiment_name)
     
     if ml_exp is not None:
         # Delete previous experiment
@@ -66,12 +69,12 @@ def main():
         # empty_dir(Path.cwd() / 'mlruns' / '.trash')
         
     experiment_id = mlflow.create_experiment(
-        s.MLFLOW_EXPERIMENT_NAME, 
+        f'{config.config_app.mlflow_experiment_name}_{ts.strftime(r"%Y%m%d_%H%m")}', 
         artifact_location='./artifacts',
-        tags={"project": s.PROJECT_NAME}
+        tags={'project': config.config_app.project_name}
     )
     
-    print(f'Created Experiment \'{s.MLFLOW_EXPERIMENT_NAME}\' | ID: {experiment_id}')
+    print(f'Created Experiment \'{config.config_app.mlflow_experiment_name}\' | ID: {experiment_id}')
 
     mlflow.sklearn.autolog()
 
@@ -79,9 +82,8 @@ def main():
     for model_name in model_objects.keys():
 
         warnings.filterwarnings('ignore')
-        ts = datetime.datetime.now()
-        
-        if s.MLFLOW_BOOL:
+                
+        if config.config_app.mlflow_bool:
             mlflow.start_run(
                 experiment_id=experiment_id, 
                 run_name=model_name+ts.strftime(r'_%Y%m%d_%H%m'), 
@@ -89,7 +91,7 @@ def main():
                 )
             ml_run = mlflow.active_run()
         
-        if s.BOOL_VERBOSE:
+        if config.config_app.bool_verbose:
             print('_'*50)
             print(f'{model_name}\n{ts}')
 
@@ -103,9 +105,9 @@ def main():
         rs = RandomizedSearchCV(
             estimator=pipeline,
             param_distributions=model_objects[model_name]['params'],
-            n_iter=s.SEARCH_ITERATIONS,
-            random_state=s.SEED,
-            cv=s.CV_FOLDS,
+            n_iter=config.config_model.search_iterations,
+            random_state=config.config_model.seed,
+            cv=config.config_model.cv_folds,
             scoring={
                 'mse': make_scorer(score_func=mean_squared_error, squared=True, greater_is_better=False),
                 'rmse': make_scorer(score_func=mean_squared_error, squared=False, greater_is_better=False),
@@ -116,7 +118,7 @@ def main():
             },
             refit='mse',
             return_train_score=False,
-            n_jobs=s.N_JOBS,
+            n_jobs=config.config_model.n_jobs,
             )
 
         rs.fit(X_train, y_train)
@@ -125,34 +127,34 @@ def main():
 
         for y_obs, x, suffix in [(y_train, X_train, '_train'), (y_test, X_test, '_test')]:
             
-            scores = calculate_scores(y_obs, rs.predict(x), scorers, verbose=s.BOOL_VERBOSE, suffix=suffix)
+            scores = calculate_scores(y_obs, rs.predict(x), scorers, verbose=config.config_app.bool_verbose, suffix=suffix)
             all_scores.update(scores)
             
-        save_pipeline(pipeline_to_persist=rs, file_path=s.PATH_MODELS / f'model_{model_name}.pkl')
+        save_pipeline(pipeline_to_persist=rs, file_path=PATH_MODELS / f'model_{model_name}.pkl')
         
         if all_scores['rmse_test'] < best_model_metric:
             
             best_model = model_name
             best_model_metric = all_scores['rmse_test']
             # Export model
-            save_pipeline(pipeline_to_persist = rs, file_path = s.PATH_MODELS / 'best_model.pkl')
+            save_pipeline(pipeline_to_persist=rs, file_path=PATH_MODELS / 'best_model.pkl')
         
-        if s.BOOL_VERBOSE:
-            print("Best Parameters for {} model:\n {}".format(model_name, rs.best_params_))
+        if config.config_app.bool_verbose:
+            print('Best Parameters for {} model:\n {}'.format(model_name, rs.best_params_))
 
             tts = ts.now() - ts
             print(f'Best model: {best_model}')
             print(f'Training time {round(tts.total_seconds())}s')
         
-        mlflow.log_param("cv_folds", s.CV_FOLDS)
-        mlflow.log_param("cv_metric", s.CV_METRIC)
-        mlflow.log_param("search_iterations", s.SEARCH_ITERATIONS)
-        mlflow.log_param("seed", s.SEED)
-        mlflow.log_param("training_set_size", X_train.shape[0])
-        mlflow.log_param("test_set_size", X_test.shape[0])    
-        mlflow.log_param("best_params", rs.best_params_)
+        mlflow.log_param('cv_folds', config.config_model.cv_folds)
+        mlflow.log_param('cv_metric', config.config_model.cv_metric)
+        mlflow.log_param('search_iterations', config.config_model.search_iterations)
+        mlflow.log_param('seed', config.config_model.seed)
+        mlflow.log_param('training_set_size', X_train.shape[0])
+        mlflow.log_param('test_set_size', X_test.shape[0])    
+        mlflow.log_param('best_params', rs.best_params_)
         
-        mlflow.set_tag("model_type", model_name)
+        mlflow.set_tag('model_type', model_name)
         mlflow.sklearn.log_model(rs, 'model')
         
         for param, value in rs.best_params_.items():
