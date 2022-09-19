@@ -7,6 +7,7 @@ import datetime
 import mlflow, mlflow.sklearn
 
 from sklearn.model_selection import RandomizedSearchCV
+from sklearn.pipeline import Pipeline
 from sklearn.metrics import (
     make_scorer, 
     mean_absolute_error, 
@@ -15,13 +16,10 @@ from sklearn.metrics import (
     r2_score, 
     max_error
 )
-from sklearn.pipeline import Pipeline
-
-# import settings as s
 
 from config.core import config, PATH_MODELS
 
-from preprocessing.preprocessor import preprocessor
+from processing.preprocessor import preprocessor
 from utils.data_manager import DataManager, save_pipeline
 from utils.scoring import scorers, calculate_scores
 from learners import model_objects

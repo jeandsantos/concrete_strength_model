@@ -7,18 +7,8 @@ from feature_engine.transformation import YeoJohnsonTransformer
 from feature_engine.wrappers import SklearnTransformerWrapper
 from feature_engine.selection import DropConstantFeatures, SmartCorrelatedSelection
 
-from preprocessing.transformers.numeric import SumTransformer, PercentageTransformer, RatioTransformer
-
+from transfomers import SumTransformer, PercentageTransformer, RatioTransformer
 from config.core import config
-
-# from settings import (
-#     COLS_COMPOSITION, 
-#     COLS_SOLIDS,
-#     COLS_RATIO_AGGREGATES_SOLIDS, 
-#     COLS_RATIO_CEMENT_WATER,
-#     FE_DROP_CONSTANT_PARAMS,
-#     FE_SMART_CORRELATION_PARAMS,
-# )
 
 preprocessor = Pipeline(steps=[
     # Create percentages

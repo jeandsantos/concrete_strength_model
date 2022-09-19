@@ -9,7 +9,7 @@ if "%SPHINXBUILD%" == "" (
 )
 set SOURCEDIR=.
 set BUILDDIR=_build
-set SPHINXPROJ=concrete_mixture_optimization
+set SPHINXPROJ=concrete_strength_model
 
 if "%1" == "" goto help
 

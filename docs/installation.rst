@@ -12,7 +12,7 @@ To install Concrete Mixture Optimization, run this command in your terminal:
 
 .. code-block:: console
 
-    $ pip install concrete_mixture_optimization
+    $ pip install concrete_strength_model
 
 This is the preferred method to install Concrete Mixture Optimization, as it will always install the most recent stable release.
 
@@ -32,13 +32,13 @@ You can either clone the public repository:
 
 .. code-block:: console
 
-    $ git clone git://github.com/jeandsantos/concrete_mixture_optimization
+    $ git clone git://github.com/jeandsantos/concrete_strength_model
 
 Or download the `tarball`_:
 
 .. code-block:: console
 
-    $ curl -OJL https://github.com/jeandsantos/concrete_mixture_optimization/tarball/master
+    $ curl -OJL https://github.com/jeandsantos/concrete_strength_model/tarball/master
 
 Once you have a copy of the source, you can install it with:
 
@@ -47,5 +47,5 @@ Once you have a copy of the source, you can install it with:
     $ python setup.py install
 
 
-.. _Github repo: https://github.com/jeandsantos/concrete_mixture_optimization
-.. _tarball: https://github.com/jeandsantos/concrete_mixture_optimization/tarball/master
+.. _Github repo: https://github.com/jeandsantos/concrete_strength_model
+.. _tarball: https://github.com/jeandsantos/concrete_strength_model/tarball/master

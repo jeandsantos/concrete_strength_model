@@ -48,9 +48,9 @@ clean-test: ## remove test and coverage artifacts
 	rm -fr .pytest_cache
 
 lint/flake8: ## check style with flake8
-	flake8 concrete_mixture_optimization tests
+	flake8 concrete_strength_model tests
 lint/black: ## check style with black
-	black --check concrete_mixture_optimization tests
+	black --check concrete_strength_model tests
 
 lint: lint/flake8 lint/black ## check style
 
@@ -61,15 +61,15 @@ test-all: ## run tests on every Python version with tox
 	tox
 
 coverage: ## check code coverage quickly with the default Python
-	coverage run --source concrete_mixture_optimization -m pytest
+	coverage run --source concrete_strength_model -m pytest
 	coverage report -m
 	coverage html
 	$(BROWSER) htmlcov/index.html
 
 docs: ## generate Sphinx HTML documentation, including API docs
-	rm -f docs/concrete_mixture_optimization.rst
+	rm -f docs/concrete_strength_model.rst
 	rm -f docs/modules.rst
-	sphinx-apidoc -o docs/ concrete_mixture_optimization
+	sphinx-apidoc -o docs/ concrete_strength_model
 	$(MAKE) -C docs clean
 	$(MAKE) -C docs html
 	$(BROWSER) docs/_build/html/index.html

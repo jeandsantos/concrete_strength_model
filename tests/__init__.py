@@ -1,1 +1,1 @@
-"""Unit test package for concrete_mixture_optimization."""
+"""Unit test package for concrete_strength_model."""
