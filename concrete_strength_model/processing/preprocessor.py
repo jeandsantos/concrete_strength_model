@@ -7,7 +7,7 @@ from feature_engine.transformation import YeoJohnsonTransformer
 from feature_engine.wrappers import SklearnTransformerWrapper
 from feature_engine.selection import DropConstantFeatures, SmartCorrelatedSelection
 
-from transfomers import SumTransformer, PercentageTransformer, RatioTransformer
+from processing.transformers import SumTransformer, PercentageTransformer, RatioTransformer
 from config.core import config
 
 preprocessor = Pipeline(steps=[

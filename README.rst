@@ -9,8 +9,8 @@ Concrete Mixture Optimization
 .. image:: https://img.shields.io/travis/jeandsantos/concrete_strength_model.svg
         :target: https://travis-ci.com/jeandsantos/concrete_strength_model
 
-.. image:: https://readthedocs.org/projects/concrete-mixture-optimization/badge/?version=latest
-        :target: https://concrete-mixture-optimization.readthedocs.io/en/latest/?version=latest
+.. image:: https://readthedocs.org/projects/concrete-strength-model/badge/?version=latest
+        :target: https://concrete-strength-model.readthedocs.io/en/latest/?version=latest
         :alt: Documentation Status
 
 
@@ -20,7 +20,7 @@ Optimization of concrete mixtures with machine learning models
 
 
 * Free software: MIT license
-* Documentation: https://concrete-mixture-optimization.readthedocs.io.
+* Documentation: https://concrete-strength-model.readthedocs.io.
 
 
 Features

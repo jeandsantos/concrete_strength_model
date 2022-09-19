@@ -84,7 +84,7 @@ def main():
         if config.config_app.mlflow_bool:
             mlflow.start_run(
                 experiment_id=experiment_id, 
-                run_name=model_name+ts.strftime(r'_%Y%m%d_%H%m'), 
+                run_name=model_name+ts.strftime(r'_%Y%m%d_%H%M'), 
                 tags={'model':model_name}
                 )
             ml_run = mlflow.active_run()
@@ -127,9 +127,7 @@ def main():
             
             scores = calculate_scores(y_obs, rs.predict(x), scorers, verbose=config.config_app.bool_verbose, suffix=suffix)
             all_scores.update(scores)
-            
-        save_pipeline(pipeline_to_persist=rs, file_path=PATH_MODELS / f'model_{model_name}.pkl')
-        
+
         if all_scores['rmse_test'] < best_model_metric:
             
             best_model = model_name

@@ -28,7 +28,7 @@ setup(
         'Programming Language :: Python :: 3.8',
         'Programming Language :: Python :: 3.9',
     ],
-    description="Optimization of concrete mixtures with machine learning models",
+    description="Predictive model for concrete compressive strength",
     install_requires=requirements,
     license="MIT license",
     long_description=readme + '\n\n' + history,
