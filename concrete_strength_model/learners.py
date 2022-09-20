@@ -1,22 +1,18 @@
 # Contains model object and the parameters to be used for hyperparameter tuning
 import numpy as np
-
-from sklearn.linear_model import Lasso, ElasticNet
-from sklearn.ensemble import RandomForestRegressor, GradientBoostingRegressor
-from sklearn.cross_decomposition import PLSRegression
-from sklearn.svm import SVR
-from sklearn.neural_network import MLPRegressor
-
 from config.core import config
+from sklearn.cross_decomposition import PLSRegression
+from sklearn.ensemble import GradientBoostingRegressor, RandomForestRegressor
+from sklearn.linear_model import ElasticNet, Lasso
+from sklearn.neural_network import MLPRegressor
+from sklearn.svm import SVR
 
 model_objects = {
-    'pls': {
-        'model': PLSRegression(
-            max_iter=1000
-            ),
-        'params': {
-            'model__n_components': range(1, config.config_model.n_features),
-        }
+    "pls": {
+        "model": PLSRegression(max_iter=1000),
+        "params": {
+            "model__n_components": range(1, config.config_model.n_features),
+        },
     },
     # 'lasso': {
     #     'model': Lasso(
@@ -27,27 +23,40 @@ model_objects = {
     #         'model__alpha': np.logspace(-6, 6, 13),
     #     }
     # },
-    'elasticnet': {
-        'model': ElasticNet(
+    "elasticnet": {
+        "model": ElasticNet(
             random_state=config.config_model.seed,
             max_iter=1000,
         ),
-        'params': {
-            'model__alpha': np.logspace(-6, 6, 13),
-            'model__l1_ratio': [0, 0.1, 0.25, 0.5, 0.75, 0.9, 1.0,],
-        }
+        "params": {
+            "model__alpha": np.logspace(-6, 6, 13),
+            "model__l1_ratio": [
+                0,
+                0.1,
+                0.25,
+                0.5,
+                0.75,
+                0.9,
+                1.0,
+            ],
+        },
     },
-    'svr': {
-        'model': SVR(
-            verbose=False
-        ),
-        'params': {
-            'model__kernel': ['poly', 'rbf',],
-            'model__degree': [2, 3, 4,],
-            'model__C': np.logspace(-3, 3, 7),
-            'model__tol': np.logspace(-3, 3, 7),
-            'model__epsilon': np.logspace(-3, 3, 7),
-        }
+    "svr": {
+        "model": SVR(verbose=False),
+        "params": {
+            "model__kernel": [
+                "poly",
+                "rbf",
+            ],
+            "model__degree": [
+                2,
+                3,
+                4,
+            ],
+            "model__C": np.logspace(-3, 3, 7),
+            "model__tol": np.logspace(-3, 3, 7),
+            "model__epsilon": np.logspace(-3, 3, 7),
+        },
     },
     # 'random_forest': {
     #     'model': RandomForestRegressor(

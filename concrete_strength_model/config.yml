@@ -72,7 +72,7 @@ fe_smart_correlation_params:
 # Parameters for model training, validation and tracking
 test_size: 0.2
 stratify_by: 'age'
-search_iterations: 50
+search_iterations: 10
 
 cv_scores: 
     - 'mse'
@@ -85,7 +85,7 @@ cv_scores:
 cv_metric: 'mse'
 cv_folds: 10
 
-mlflow_bool: True
+mlflow_bool: False
 mlflow_tracking_uri: 'http://localhost:5000'
 mlflow_experiment_name: 'concrete-mixtures'
 
