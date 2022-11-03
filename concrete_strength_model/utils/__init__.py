@@ -1,4 +1,5 @@
-from . import data_manager, scoring
+from .data_manager import *
+from .scoring import *
 
 """
 Subpackage with supporting functions and classes

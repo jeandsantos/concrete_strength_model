@@ -47,9 +47,15 @@ preprocessor = Pipeline(
         ),
         ## Feature Transformation
         # Yeo-Johnson Transform
-        ("yeojohnson", YeoJohnsonTransformer()),
+        (
+            "yeojohnson", 
+            YeoJohnsonTransformer()
+        ),
         # Z-score scaling
-        ("standardization", SklearnTransformerWrapper(transformer=StandardScaler())),
+        (
+            "standardization", 
+            SklearnTransformerWrapper(transformer=StandardScaler())
+        ),
         # Remove highly correlated
         (
             "remove_correlated",
